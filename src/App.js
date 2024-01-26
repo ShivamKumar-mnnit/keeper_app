@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
 
+import { useState } from 'react';
+import './App.css';
+import CreateArea from './components/CreateArea';
+import Note from './components/Note';
 function App() {
+
+  const [notes,setNotes]= useState([]);
+
+
+
+  function addNote(newNote){
+    console.log(newNote);
+    setNotes(prevNotes=>{
+      return [...prevNotes,newNote];
+    })
+  }
+
+  function deleteNote(id){
+      setNotes(prevNotes=>{
+        return prevNotes.filter((note,index)=>{
+            return index !== id;
+        })
+      })
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <CreateArea onAdd={addNote}/>
+    {
+    notes.map((note,index) => {
+       return  <Note 
+              key={index}
+              id={index}
+       title={note.title} content = {note.content} onDelete={deleteNote} />
+     })
+    }
     </div>
   );
 }
